@@ -7,6 +7,19 @@ Meteor.subscribe('seenImages');
 import './main.html';
 
 Template.image.onCreated(function switcherOnCreated() {
+	$("body").keydown(function(event) {
+		switch (event.keyCode) {
+			case 39:
+			case 40:
+				Meteor.call("nextImage");
+				break;
+
+			case 37:
+			case 38:
+				Meteor.call("previousImage");
+				break;
+		}
+	});
 });
 
 Template.image.helpers({

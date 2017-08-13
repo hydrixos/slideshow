@@ -71,19 +71,28 @@ WebApp.connectHandlers.use(function(request, response, next) {
 /*
  * Image switching
  */
-function switchImage() {
-	var image = Images.currentImage();
-	if (image) {
-		SeenImages.insert({path: image.path});
-	}
-
-	if (Images.find().count() > 0 && (!Images.currentImage())) {
-		SeenImages.remove({});
-	}
-}
-
 var imageSwitchingTimer;
 Images.find().observeChanges({added: function() {
 	Meteor.clearInterval(imageSwitchingTimer);
-	imageSwitchingTimer = Meteor.setInterval(switchImage, imageSwitchInterval);
+	imageSwitchingTimer = Meteor.setInterval(function() { Meteor.call("nextImage"); }, imageSwitchInterval);
 }});
+
+
+Meteor.methods({
+	nextImage: function() {
+		var image = Images.currentImage();
+		if (image) {
+			SeenImages.insert({path: image.path, seen_at: new Date()});
+		}
+
+		if (Images.find().count() > 0 && (!Images.currentImage())) {
+			SeenImages.remove({});
+		}
+	},
+	previousImage: function() {
+		var image = SeenImages.findOne({}, {sort: {created_at: -1}});
+		if (image) {
+			SeenImages.remove({path: image.path});
+		}
+	}
+});
