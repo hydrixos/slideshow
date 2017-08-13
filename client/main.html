@@ -1,0 +1,14 @@
+<head>
+  <title>slideshow</title>
+</head>
+
+<body style="padding:0;margin:auto;background:#000;">
+  {{> image }}
+</body>
+
+<template name="image">
+	<div style="-webkit-backface-visibility: hidden;">
+		<div style="background-image: url('{{ currentImage.url }}'); background-position: center center; background-size: contain; background-repeat: no-repeat; height: 100vH; width: 100vW; transition: background-image 1s ease-in-out;">
+		</div>
+	</div>
+</template>
