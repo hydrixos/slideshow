@@ -12,15 +12,15 @@ Meteor.publish('seenImages', function() { return SeenImages.find(); });
 /*
  * Collection of images on disk
  */
-var imagesFolder = '/Users/frieder/testfolder/';
+var imagesFolder = '/home/frieder/Pictures/';
 var imagesServerURL = 'images/';
 var imageSwitchInterval = 20000;
 
 // Creates an image descriptor
-function get_file_descriptor(path) {
-	return {'path': path,
-			'url': 	encodeURI(imagesServerURL + path),
-			'created_at': FS.statSync(imagesFolder + path).ctime
+function get_file_descriptor(relativePath) {
+	return {'path': relativePath,
+			'url': 	encodeURI(imagesServerURL + relativePath),
+			'created_at': FS.statSync(imagesFolder + relativePath).ctime
 		   }
 }
 
@@ -30,20 +30,35 @@ Meteor.publish('images', function() { return Images.find(); });
 Meteor.startup(function() {
 	Images.remove({});
 
-	var images = FS.readdirSync(imagesFolder);
-	_.each(images, function(image) {
-	  if (image.match(/.(jpg|jpeg|png|gif)$/i) !== null) {
-		  Images.insert(get_file_descriptor(image));
-	  }
-	});
+	function readImages(relativePath) {
+		var fullPath = imagesFolder + "/" + relativePath
+		var files = FS.readdirSync(fullPath);
+		if (!files)
+			return;
+
+		_.each(files, function(file) {
+			if (file.match(/.(jpg|jpeg|png|gif)$/i) !== null) {
+				console.log("Found Image: ", file);
+				Images.insert(get_file_descriptor(relativePath + "/" + file));
+	  		}
+			 else if (FS.statSync(fullPath + "/" + file).isDirectory()) {
+				readImages(relativePath + "/" + file);
+			}
+		});
+	}
+
+	readImages("/");
+
 });
 
 // Update on file changes
 FSMonitor.watch(imagesFolder, null, Meteor.bindEnvironment(function(change) {
 	_.each(change.addedFiles, function(addedFile) {
+		console.log("Added Image: ", image);
 		Images.insert(get_file_descriptor(addedFile));
 	});
 	_.each(change.removedFiles, function(removedFile) {
+		console.log("Removed Image: ", image);
 		Images.remove({path: removedFile});
 	});
 }));
