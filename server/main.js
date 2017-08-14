@@ -58,7 +58,7 @@ FSMonitor.watch(imagesFolder, null, Meteor.bindEnvironment(function(change) {
 		Images.insert(get_file_descriptor(addedFile));
 	});
 	_.each(change.removedFiles, function(removedFile) {
-		console.log("Removed Image: ", image);
+		console.log("Removed Image: ", removedFile);
 		Images.remove({path: removedFile});
 	});
 }));
