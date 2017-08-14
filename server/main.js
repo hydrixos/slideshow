@@ -54,7 +54,7 @@ Meteor.startup(function() {
 // Update on file changes
 FSMonitor.watch(imagesFolder, null, Meteor.bindEnvironment(function(change) {
 	_.each(change.addedFiles, function(addedFile) {
-		console.log("Added Image: ", image);
+		console.log("Added Image: ", addedFile);
 		Images.insert(get_file_descriptor(addedFile));
 	});
 	_.each(change.removedFiles, function(removedFile) {
