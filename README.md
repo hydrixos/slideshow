@@ -7,7 +7,8 @@ folder while the app was already running. It was implemented using the Meteor fr
 
 I used this during a party in combination with several chat services
 (e.g. Whatsapp, Telegram, iMessage, Mail). Our guests where able to send images
-to a phone number. All images were instantaneously presented on a display.
+to a phone number or an email address. All images sent to this number / address were instantaneously 
+presented on a display together with all older images. 
 
 Please note: This has been hacked very fast without much Meteor / Node expertise :).
 
