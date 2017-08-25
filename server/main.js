@@ -20,11 +20,16 @@ var imagesServerURL = 'images/';
 var imageSwitchInterval = 20000;
 
 // Creates an image descriptor
-function get_file_descriptor(relativePath) {
+function getFileDescriptor(relativePath) {
 	return {'path': relativePath,
 			'url': 	encodeURI(imagesServerURL + relativePath),
-			'created_at': FS.statSync(imagesFolder + relativePath).ctime
+			'created_at': FS.statSync(imagesFolder + "/" + relativePath).ctime
 		   }
+}
+
+// Whether or not the file is an image
+function isImageFilename(filename) {
+	return filename.match(/.(jpg|jpeg|png|gif)$/i) !== null;
 }
 
 // Setup collection of images on disk
@@ -40,9 +45,9 @@ Meteor.startup(function() {
 			return;
 
 		_.each(files, function(file) {
-			if (file.match(/.(jpg|jpeg|png|gif)$/i) !== null) {
+			if (isImageFilename(file)) {
 				console.log("Found Image: ", file);
-				Images.insert(get_file_descriptor(relativePath + "/" + file));
+				Images.insert(getFileDescriptor(relativePath + "/" + file));
 	  		}
 			 else if (FS.statSync(fullPath + "/" + file).isDirectory()) {
 				readImages(relativePath + "/" + file);
@@ -57,12 +62,16 @@ Meteor.startup(function() {
 // Update on file changes
 FSMonitor.watch(imagesFolder, null, Meteor.bindEnvironment(function(change) {
 	_.each(change.addedFiles, function(addedFile) {
-		console.log("Added Image: ", addedFile);
-		Images.insert(get_file_descriptor(addedFile));
+		if (isImageFilename(addedFile)) {
+			console.log("Added Image: ", addedFile);
+			Images.insert(getFileDescriptor(addedFile));
+		}
 	});
 	_.each(change.removedFiles, function(removedFile) {
-		console.log("Removed Image: ", removedFile);
-		Images.remove({path: removedFile});
+		if (isImageFilename(removedFile)) {
+			console.log("Removed Image: ", removedFile);
+			Images.remove({path: removedFile});
+		}
 	});
 }));
 
