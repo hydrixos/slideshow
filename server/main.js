@@ -103,11 +103,5 @@ Meteor.methods({
 		if (Images.find().count() > 0 && (!Images.currentImage())) {
 			SeenImages.remove({});
 		}
-	},
-	previousImage: function() {
-		var image = SeenImages.findOne({}, {sort: {created_at: -1}});
-		if (image) {
-			SeenImages.remove({path: image.path});
-		}
 	}
 });

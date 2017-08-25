@@ -13,11 +13,6 @@ Template.image.onCreated(function switcherOnCreated() {
 			case 40:
 				Meteor.call("nextImage");
 				break;
-
-			case 37:
-			case 38:
-				Meteor.call("previousImage");
-				break;
 		}
 	});
 });
