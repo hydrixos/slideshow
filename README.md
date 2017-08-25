@@ -1,9 +1,9 @@
-# Meteor Folder Slideshow
+# Auto-updating Folder Slideshow
 
 This repo contains a simple web application that shows a slideshow of images
 stored inside a folder hierarchy inside a browser window. In addition it
 observes the folder for changes and presents new images that were added to the
-folder while the app was already running.
+folder while the app was already running. It was implemented using the Meteor framework.
 
 I used this during a party in combination with several chat services
 (e.g. Whatsapp, Telegram, iMessage, Mail). Our guests where able to send images
