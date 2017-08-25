@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 #
 # A hack to copy pictures received via iMessage to a Dropbox folder. Just
