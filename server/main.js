@@ -3,6 +3,7 @@ import '/common/file.js'
 
 FS = Npm.require('fs')
 FSMonitor = Npm.require('fsmonitor')
+ExpandTilde = require('expand-tilde');
 
 /*
  * Collection of images seen so far
@@ -11,8 +12,10 @@ Meteor.publish('seenImages', function() { return SeenImages.find(); });
 
 /*
  * Collection of images on disk
+ *
+ * Make sure all paths end with /!
  */
-var imagesFolder = '/home/frieder/Pictures/';
+var imagesFolder = ExpandTilde("~/Dropbox/Pictures/");
 var imagesServerURL = 'images/';
 var imageSwitchInterval = 20000;
 
