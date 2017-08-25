@@ -47,12 +47,21 @@ running the script:
 
 	- `gem install mail`
 
+To run the script, you have to pass the following arguments:
+
+	`imap-image.rb HOST USERNAME PASSWORD TARGETFOLDER`
+
+The script will poll your IMAP server every 60 seconds.
+
 #### iMessage
 To receive images on iMessage, I've created a further script that reads the
 iMessage image cache folder on macOS and copies it to a dropbox folder. (You
 can find it in tools/imessage.rb).
 
-You find it in `tools/imap-image.rb`. You need to install the `fswatch` Gem before
+You find it in `tools/imessage.rb`. You need to install the `fswatch` Gem before
 running the script:
 
 	- `gem install fswatch`
+
+After starting the script, it will wait for incomming iMessages and copies them
+to the given target folder.
